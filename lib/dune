@@ -1,6 +1,13 @@
 (library
  (name xch)
- (libraries core bignum fmt logs logs.fmt)
- (preprocess (pps ppx_deriving.show ppx_deriving.make)))
+ (inline_tests)
+ (libraries core bignum qcheck-core fmt logs logs.fmt)
+ (library_flags -linkall)
+ (preprocess
+  (pps ppx_deriving.show ppx_deriving.make
+    ppx_sexp_conv ppx_inline_test ppx_bench ppx_expect)))
 
-(env (dev (flags (:standard -warn-error -A))))
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))

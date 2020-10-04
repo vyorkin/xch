@@ -25,5 +25,6 @@ val best_bid : t -> Order.t option
 (** Gets order with the lowest ask price (if any). *)
 val best_ask : t -> Order.t option
 
-(** Matches orders and returns a list of trades. *)
-val trade : t -> Trade.t list -> t * Trade.t list
+(** Matches orders and returns a
+    list of trades and updated order book. *)
+val trade : t -> t * Trade.t list

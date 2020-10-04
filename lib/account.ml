@@ -9,7 +9,6 @@ type t = {
   username: string;
   balance: Bignum.t ref;
   shares: int ref;
-  orders: (int, Order.t) Hashtbl.t ref;
 }
 
 let create ?(balance = Bignum.zero) ?(shares = 0) username =
@@ -17,7 +16,7 @@ let create ?(balance = Bignum.zero) ?(shares = 0) username =
     username;
     balance = ref balance;
     shares = ref shares;
-    orders = ref (Hashtbl.create 10);
   }
 
-let trade _ = ()
+(* let gen =
+ *   let open QCheck.Gen in *)

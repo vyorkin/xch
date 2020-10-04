@@ -15,7 +15,6 @@ let next_id () =
   id_counter := !id_counter + 1;
   !id_counter
 
-
 type trade =
   { id: int;
     trader: Account.t;

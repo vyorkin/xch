@@ -5,6 +5,7 @@ type t =
   { mutable order_book: Order_book.t;
     mutable last_trade_price: Bignum.t;
     accounts: (int, Account.t) Hashtbl.t;
+    orders: (int, Order.t list) Hashtbl.t;
     history: Trade.HistoryEntry.t list;
   }
 
@@ -15,5 +16,6 @@ val create :
   Order_book.t ->
   t
 
-(** Matches all possible orders and returns a list of trades. *)
-val match_orders : t -> Trade.t list
+(** Matches all possible orders, updates the state of
+    exchange and returns a list of trades. *)
+val trade : t -> Trade.t list

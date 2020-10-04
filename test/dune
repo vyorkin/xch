@@ -1,0 +1,10 @@
+(executable
+ (name testsuite)
+ (libraries xch core alcotest qcheck qcheck-alcotest)
+ (preprocess
+  (pps ppx_deriving.show)))
+
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))
