@@ -1,11 +1,13 @@
 open Core_kernel
 
 module HistoryEntry: sig
+  (** Represents a trade history entry. *)
   type t =
     { qty: int;
       price: Bignum.t;
-    }
+    } [@@deriving show]
 
+  (** Creates a trade history entry. *)
   val create : int -> Bignum.t -> t
 end
 
@@ -18,12 +20,13 @@ type trade =
     price: Bignum.t;
     qty: int;
     created_at: Time.t;
-  }
+  } [@@deriving show]
 
 (** Represents a trade between seller and buyer. *)
 type t =
   | Sell of trade
   | Buy of trade
+  [@@deriving show]
 
 (** Creates a trade data. *)
 val trade : trader:Account.t -> deal:Deal.t -> trade

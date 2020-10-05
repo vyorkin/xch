@@ -25,5 +25,5 @@ let create ~bid ~ask =
     qty;
   }
 
-let filled deal =
+let filled_orders deal =
   (Order.filled deal.bid, Order.filled deal.ask)

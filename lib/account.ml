@@ -7,9 +7,9 @@ let next_id () =
 type t = {
   id: int;
   username: string;
-  balance: Bignum.t ref;
+  balance: Bignum.t ref [@printer fun fmt x -> Pretty.price fmt !x];
   shares: int ref;
-}
+} [@@deriving show { with_path = false }]
 
 let create ?(balance = Bignum.zero) ?(shares = 0) username =
   { id = next_id ();

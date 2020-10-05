@@ -3,10 +3,10 @@ module Decision: sig
   type t =
     { price: Bignum.t;
       qty: int;
-    }
+    } [@@deriving show]
 
   (** Makes a decision [t] using a
-      given [factors] and last price change. *)
+      given [factors] and a last price change. *)
   val make : float * float -> float * float -> Bignum.t -> t
 
   (** Generates a decision making function. *)
@@ -17,7 +17,7 @@ end
 type t =
   { account: Account.t;
     decision: Decision.t;
-  }
+  } [@@deriving show]
 
-(** Generates a new random agent. *)
+(** Generates a new random trading agent. *)
 (* val gen : unit -> t *)

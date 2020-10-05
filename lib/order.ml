@@ -1,11 +1,11 @@
-open Core_kernel
+open Core
 
 module Partial = struct
   type t =
     { qty: int;
-      price: Bignum.t;
-      created_at: Time.t;
-    }
+      price: Bignum.t [@printer Pretty.price];
+      created_at: Time.t [@printer Pretty.timestamp];
+    } [@@deriving show { with_path = false }]
 
   let create ~qty ~price =
     { qty;
@@ -32,10 +32,10 @@ type t = {
   id: int;
   account: Account.t;
   qty: int;
-  price: Bignum.t;
+  price: Bignum.t [@printer Pretty.price];
   partials: Partial.t list;
-  created_at: Time.t;
-}
+  created_at: Time.t [@printer Pretty.timestamp];
+} [@@deriving show { with_path = false }]
 
 let create ~account ~qty ~price =
   { id = next_id ();

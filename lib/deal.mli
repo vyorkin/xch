@@ -10,4 +10,4 @@ type t =
 val create : bid:Order.t -> ask:Order.t -> t
 
 (** Returns a filled bid and ask orders from a given deal. *)
-val filled: t -> Order.t option * Order.t option
+val filled_orders: t -> Order.t option * Order.t option

@@ -1,8 +1,8 @@
 module Decision = struct
   type t =
-    { price: Bignum.t;
+    { price: Bignum.t [@printer Pretty.price];
       qty: int;
-    }
+    } [@@deriving show { with_path = false }]
 
   let make (w1, b1) (w2, b2) delta =
     let d = Bignum.to_float delta in
@@ -19,7 +19,7 @@ end
 type t =
   { account: Account.t;
     decision: Decision.t;
-  }
+  } [@@deriving show { with_path = false }]
 
 (* let gen () =
  *   let account = Account. *)

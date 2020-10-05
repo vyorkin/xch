@@ -16,6 +16,6 @@ val create :
   Order_book.t ->
   t
 
-(** Matches all possible orders, updates the state of
-    exchange and returns a list of trades. *)
+(** Fills all matching orders, updates the
+    state of exchange and returns a list of fulfilled trades. *)
 val trade : t -> Trade.t list

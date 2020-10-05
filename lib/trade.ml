@@ -1,10 +1,10 @@
-open Core_kernel
+open Core
 
 module HistoryEntry = struct
   type t =
     { qty: int;
-      price: Bignum.t;
-    }
+      price: Bignum.t [@printer Pretty.price];
+    } [@@deriving show { with_path = false }]
 
   let create qty price = { qty; price }
 end
@@ -20,14 +20,15 @@ type trade =
     trader: Account.t;
     bid: Order.t;
     ask: Order.t;
-    price: Bignum.t;
+    price: Bignum.t [@printer Pretty.price];
     qty: int;
-    created_at: Time.t;
-  }
+    created_at: Time.t [@printer Pretty.timestamp];
+  } [@@deriving show { with_path = false }]
 
 type t =
   | Sell of trade
   | Buy of trade
+  [@@deriving show]
 
 let trade ~trader ~(deal: Deal.t) =
   { id = next_id ();

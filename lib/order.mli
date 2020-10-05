@@ -6,7 +6,7 @@ module Partial: sig
     { qty: int;
       price: Bignum.t;
       created_at: Time.t;
-    }
+    } [@@deriving show]
 
   (** Creates a partial fulfillment. *)
   val create: qty:int -> price:Bignum.t -> t
@@ -24,7 +24,7 @@ type t =
     price: Bignum.t;
     partials: Partial.t list;
     created_at: Time.t;
-  }
+  } [@@deriving show]
 
 (** Creates a new order. *)
 val create : account:Account.t -> qty:int -> price:Bignum.t -> t
