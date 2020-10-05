@@ -3,7 +3,7 @@ open Core
 module Partial = struct
   type t =
     { qty: int;
-      price: Bignum.t [@printer Pretty.price];
+      price: Bignum.t [@printer Pretty.bignum];
       created_at: Time.t [@printer Pretty.timestamp];
     } [@@deriving show { with_path = false }]
 
@@ -32,7 +32,7 @@ type t = {
   id: int;
   account: Account.t;
   qty: int;
-  price: Bignum.t [@printer Pretty.price];
+  price: Bignum.t [@printer Pretty.bignum];
   partials: Partial.t list;
   created_at: Time.t [@printer Pretty.timestamp];
 } [@@deriving show { with_path = false }]

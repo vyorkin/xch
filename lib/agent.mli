@@ -10,14 +10,17 @@ module Decision: sig
   val make : float * float -> float * float -> Bignum.t -> t
 
   (** Generates a decision making function. *)
-  val gen : unit -> (Bignum.t -> t)
+  val decide : unit -> (Bignum.t -> t)
+
+  (** Decision generator. *)
+  (* val gen : t QCheck.Gen.t *)
 end
 
-(** Contains agent state and decision making logic. *)
+(** Contains a trading agent state and decision making logic. *)
 type t =
   { account: Account.t;
     decision: Decision.t;
   } [@@deriving show]
 
-(** Generates a new random trading agent. *)
-(* val gen : unit -> t *)
+(** Trading agent generator. *)
+(* val gen : t QCheck.Gen.t *)

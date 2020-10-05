@@ -1,6 +1,6 @@
 module Decision = struct
   type t =
-    { price: Bignum.t [@printer Pretty.price];
+    { price: Bignum.t [@printer Pretty.bignum];
       qty: int;
     } [@@deriving show { with_path = false }]
 
@@ -10,7 +10,7 @@ module Decision = struct
     let qty = Int.of_float @@ Math.logistic (w2 *. d +. b2) in
     { price; qty }
 
-  let gen () =
+  let decide () =
     let price = (Math.random (), Math.random ()) in
     let qty = (Math.random (), Math.random ()) in
     make price qty
@@ -22,4 +22,7 @@ type t =
   } [@@deriving show { with_path = false }]
 
 (* let gen () =
- *   let account = Account. *)
+ *   let open Gen.Syntax in
+ *   let* account = Account.Gen.gen in
+ *   let* decision = Decision.gen in
+ *   { account; decision } *)

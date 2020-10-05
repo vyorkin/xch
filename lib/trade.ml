@@ -3,7 +3,7 @@ open Core
 module HistoryEntry = struct
   type t =
     { qty: int;
-      price: Bignum.t [@printer Pretty.price];
+      price: Bignum.t [@printer Pretty.bignum];
     } [@@deriving show { with_path = false }]
 
   let create qty price = { qty; price }
@@ -20,7 +20,7 @@ type trade =
     trader: Account.t;
     bid: Order.t;
     ask: Order.t;
-    price: Bignum.t [@printer Pretty.price];
+    price: Bignum.t [@printer Pretty.bignum];
     qty: int;
     created_at: Time.t [@printer Pretty.timestamp];
   } [@@deriving show { with_path = false }]
@@ -28,7 +28,7 @@ type trade =
 type t =
   | Sell of trade
   | Buy of trade
-  [@@deriving show]
+  [@@deriving show{ with_path = false }]
 
 let trade ~trader ~(deal: Deal.t) =
   { id = next_id ();
