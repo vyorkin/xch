@@ -21,15 +21,31 @@ let create ~num_agents =
     ticks = ref 0;
   }
 
+(* val gen_orders :
+    agents:Agent.t list ->
+    orders:(int, Order.t list) Hashtbl.t ->
+    (Order.direction, Order.t) list
+*)
+
+let gen_orders ~agents ~(xch: Exchange.t) =
+  Hashtbl.fold ~f:(fun ~key:account_id ~data:agent acc ->
+    let orders = Option.to_list (Hashtbl.find xch.orders account_id) in
+    let exceed = List.length orders >= agent.Agent.max_orders in
+    if exceed then acc else begin
+      let price_change = xch.last_price_change in
+      let order = Agent.create_order ~price_change agent in
+      order :: acc
+    end
+  ) agents ~init:[]
+
 let step sim =
   let price_change = sim.exchange.last_price_change in
-  let orders =
-    Hashtbl.fold
-      ~f:(fun ~key:_ ~data:agent acc ->
-        let order = Agent.create_order ~price_change agent in
-        order :: acc
-      ) sim.agents ~init:[] in
-  ()
+  let orders = gen_orders ~agents:sim.agents ~xch:sim.exchange in
+
+  (* List.iter ~f:(fun order -> ) orders; *)
+
+  sim.ticks := !(sim.ticks) + 1;
+  sim
 
 let run ~steps sim =
-  ()
+  sim

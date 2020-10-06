@@ -11,7 +11,7 @@ type t =
 val create : num_agents:int -> t
 
 (** Perfroms a single step of simulation. *)
-val step : t -> unit
+val step : t -> t
 
 (** Performs a number of simulation [steps]. *)
-val run : steps:int -> t -> unit
+val run : steps:int -> t -> t

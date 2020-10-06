@@ -28,7 +28,7 @@ type t =
   | Buy of trade
   [@@deriving show]
 
-(** Creates a trade data. *)
+(** Creates a new trade data. *)
 val trade : trader:Account.t -> deal:Deal.t -> trade
 
 (** Creates a sell trade. *)

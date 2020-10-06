@@ -28,7 +28,7 @@ type trade =
 type t =
   | Sell of trade
   | Buy of trade
-  [@@deriving show{ with_path = false }]
+  [@@deriving show { with_path = false }]
 
 let trade ~trader ~(deal: Deal.t) =
   { id = next_id ();

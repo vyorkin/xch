@@ -1,8 +1,8 @@
 module Decision: sig
   (** Prediction decision. *)
   type t =
-    { price: Bignum.t;
-      qty: int;
+    { price_delta: float;
+      qty_delta: float;
     } [@@deriving show]
 
   (** Makes a decision [t] using a
@@ -16,6 +16,7 @@ end
 (** Contains a trading agent state and decision making logic. *)
 type t =
   { account: Account.t;
+    max_orders: int;
     decide: float -> Decision.t;
   } [@@deriving show]
 
@@ -25,5 +26,5 @@ val gen : t QCheck.Gen.t
 (** Generates a given number of agents. *)
 val generate : int -> t list
 
-(** Creates a new order depending on a [price_change]. *)
-val create_order : price_change:float -> t -> Order.t
+(** Attempts to create a new order depending on a [price_change]. *)
+val create_order : price_change:float -> t -> Order.t option

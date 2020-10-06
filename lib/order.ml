@@ -28,8 +28,12 @@ let next_id () =
   id_counter := !id_counter + 1;
   !id_counter
 
+type direction = Ask | Bid
+  [@@deriving show { with_path = false }]
+
 type t = {
   id: int;
+  direction: direction;
   account: Account.t;
   qty: int;
   price: Bignum.t [@printer Pretty.bignum];
@@ -37,14 +41,19 @@ type t = {
   created_at: Time.t [@printer Pretty.timestamp];
 } [@@deriving show { with_path = false }]
 
-let create ~account ~qty ~price =
+let create ~account ~qty ~price direction =
   { id = next_id ();
+    direction;
     account;
     qty;
     price;
     partials = [];
     created_at = Time.now ();
   }
+
+let ask = create Ask
+
+let bid = create Bid
 
 let trade_price ~bid ~ask =
   if Time.(bid.created_at >= ask.created_at)

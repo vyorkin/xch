@@ -1,9 +1,9 @@
 open Core_kernel
 
 type t =
-  { mutable order_book: Order_book.t;
-    mutable last_trade_price: Bignum.t;
-    mutable last_price_change: float;
+  { order_book: Order_book.t;
+    last_trade_price: Bignum.t;
+    last_price_change: float;
     orders: (int, Order.t list) Hashtbl.t;
   }
 
@@ -23,7 +23,10 @@ let trade xch =
     | None -> xch.last_trade_price
   in
   let last_price_change = Bignum.(to_float xch.last_trade_price /. to_float last_trade_price) -. 1.0 in
-  xch.last_trade_price <- last_trade_price;
-  xch.last_price_change <- last_price_change;
-  xch.order_book <- order_book;
-  trades
+  let xch' =
+    { xch with
+      last_trade_price;
+      last_price_change;
+      order_book
+    }
+  in (xch', trades)
