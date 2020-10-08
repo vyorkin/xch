@@ -1,13 +1,13 @@
 module Decision = struct
   type t =
-    { price_delta: float;
-      qty_delta: float;
+    { price_factor: float;
+      qty_factor: float;
     } [@@deriving show { with_path = false }]
 
-  let decide (w1, b1) (w2, b2) delta =
-    let price_delta = 2.0 *. Math.logistic (w1 *. delta +. b1) -. 1.0 in
-    let qty_delta = Math.logistic (w2 *. delta +. b2) in
-    { price_delta; qty_delta }
+  let decide (w1, b1) (w2, b2) price_delta =
+    let price_factor = 2.0 *. Math.logistic (w1 *. price_delta +. b1) -. 1.0 in
+    let qty_factor = Math.logistic (w2 *. price_factor +. b2) in
+    { price_factor; qty_factor }
 
   let decision_maker () =
     let price = (Math.random (), Math.random ()) in
@@ -33,11 +33,11 @@ let generate n =
   QCheck.Gen.generate ~n gen
 
 let create_order ~price_change agent =
-  let { price_delta; qty_delta }: Decision.t = agent.decide price_change in
-  let price = (1.0 +. price_delta) *. price_change in
+  let { price_factor; qty_factor }: Decision.t = agent.decide price_change in
+  let price = (1.0 +. price_factor) *. price_change in
   let ask () =
     let shares = Int.to_float !(agent.account.shares) in
-    let qty = qty_delta *. shares in
+    let qty = qty_factor *. shares in
     Order.ask
       ~account:agent.account
       ~qty:(truncate qty)
@@ -45,7 +45,7 @@ let create_order ~price_change agent =
   in
   let bid () =
     let balance = Bignum.to_float !(agent.account.balance) in
-    let cost = qty_delta *. balance in
+    let cost = qty_factor *. balance in
     let qty = cost /. price in
     Order.bid
       ~account:agent.account

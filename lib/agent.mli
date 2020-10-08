@@ -1,8 +1,8 @@
 module Decision: sig
   (** Prediction decision. *)
   type t =
-    { price_delta: float;
-      qty_delta: float;
+    { price_factor: float;
+      qty_factor: float;
     } [@@deriving show]
 
   (** Makes a decision [t] using a
