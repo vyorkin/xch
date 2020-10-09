@@ -3,7 +3,7 @@ open Core_kernel
 type t =
   { agents: (int, Agent.t) Hashtbl.t;
     exchange: Exchange.t;
-    history: Trade.HistoryEntry.t list;
+    trades: Trade.t list;
     ticks: int ref;
   }
 

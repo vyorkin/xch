@@ -34,7 +34,7 @@ let generate n =
 
 let create_order ~price_change agent =
   let { price_factor; qty_factor }: Decision.t = agent.decide price_change in
-  let price = (1.0 +. price_factor) *. price_change in
+  let price = price_factor *. price_change in
   let ask () =
     let shares = Int.to_float !(agent.account.shares) in
     let qty = qty_factor *. shares in

@@ -17,21 +17,26 @@ let rec insert_order ~compare l o =
      then o :: l
      else o' :: (insert_order ~compare tl o)
 
-let place_bid order_book order =
-  { order_book with
-    bids = insert_order ~compare:Order.desc order_book.bids order
-  }
-
 let place_ask order_book order =
   { order_book with
     asks = insert_order ~compare:Order.asc order_book.asks order
   }
 
-let best_bid order_book =
-  List.hd order_book.bids
+let place_bid order_book order =
+  { order_book with
+    bids = insert_order ~compare:Order.desc order_book.bids order
+  }
+
+let place order_book (order: Order.t) =
+  match order.direction with
+  | Ask -> place_ask order_book order
+  | Bid -> place_bid order_book order
 
 let best_ask order_book =
   List.hd order_book.asks
+
+let best_bid order_book =
+  List.hd order_book.bids
 
 let trade order_book =
   let rec aux order_book trades =

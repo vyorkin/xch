@@ -1,16 +1,5 @@
 open Core_kernel
 
-module HistoryEntry: sig
-  (** Represents a trade history entry. *)
-  type t =
-    { qty: int;
-      price: Bignum.t;
-    } [@@deriving show]
-
-  (** Creates a trade history entry. *)
-  val create : int -> Bignum.t -> t
-end
-
 (** Contains trade data. *)
 type trade =
   { id: int;
@@ -39,3 +28,15 @@ val buy : Order.t * Deal.t -> t
 
 (** Unwraps trade data. *)
 val unwrap : t -> trade
+
+module HistoryEntry: sig
+  (** Represents a trade history entry. *)
+  type t =
+    { qty: int;
+      price: Bignum.t;
+      timestamp: Time.t;
+    } [@@deriving show]
+
+  (** Creates a trade history entry out of [trade]. *)
+  val of_trade : trade -> t
+end

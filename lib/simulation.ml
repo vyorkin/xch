@@ -3,7 +3,7 @@ open Core_kernel
 type t =
   { agents: (int, Agent.t) Hashtbl.t;
     exchange: Exchange.t;
-    history: Trade.HistoryEntry.t list;
+    trades: Trade.t list;
     ticks: int ref;
   }
 
@@ -17,15 +17,9 @@ let create ~num_agents =
     );
   { agents = agents_table;
     exchange = Exchange.create ();
-    history = [];
+    trades = [];
     ticks = ref 0;
   }
-
-(* val gen_orders :
-    agents:Agent.t list ->
-    orders:(int, Order.t list) Hashtbl.t ->
-    (Order.direction, Order.t) list
-*)
 
 let gen_orders ~agents ~(xch: Exchange.t) =
   Hashtbl.fold ~f:(fun ~key:account_id ~data:agent acc ->
@@ -34,18 +28,18 @@ let gen_orders ~agents ~(xch: Exchange.t) =
     if exceed then acc else begin
       let price_change = xch.last_price_change in
       let order = Agent.create_order ~price_change agent in
-      order :: acc
+      match order with
+      | Some o -> o :: acc
+      | None -> acc
     end
   ) agents ~init:[]
 
 let step sim =
-  let price_change = sim.exchange.last_price_change in
-  let orders = gen_orders ~agents:sim.agents ~xch:sim.exchange in
-
-  (* List.iter ~f:(fun order -> ) orders; *)
-
   sim.ticks := !(sim.ticks) + 1;
-  sim
+  let orders = gen_orders ~agents:sim.agents ~xch:sim.exchange in
+  let exchange = Exchange.place_orders sim.exchange orders in
+  let (exchange, trades) = Exchange.trade exchange in
+  { sim with trades; exchange }
 
 let run ~steps sim =
   sim

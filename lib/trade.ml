@@ -1,14 +1,5 @@
 open Core
 
-module HistoryEntry = struct
-  type t =
-    { qty: int;
-      price: Bignum.t [@printer Pretty.bignum];
-    } [@@deriving show { with_path = false }]
-
-  let create qty price = { qty; price }
-end
-
 let id_counter = ref 0
 
 let next_id () =
@@ -47,3 +38,17 @@ let buy (order, deal) =
   Buy Order.(trade ~trader:order.account ~deal)
 
 let unwrap = function | Sell t -> t | Buy t -> t
+
+module HistoryEntry = struct
+  type t =
+    { qty: int;
+      price: Bignum.t [@printer Pretty.bignum];
+      timestamp: Time.t [@printer Pretty.timestamp];
+    } [@@deriving show { with_path = false }]
+
+  let of_trade (trade: trade) =
+    { price = trade.price;
+      qty = trade.qty;
+      timestamp = trade.created_at;
+    }
+end

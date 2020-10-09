@@ -14,3 +14,6 @@ val create : ?order_book:Order_book.t -> unit -> t
 (** Fills all matching orders, updates the
     state of exchange and returns a list of fulfilled trades. *)
 val trade : t -> t * Trade.t list
+
+(** Places a given list of orders. *)
+val place_orders : t -> Order.t list -> t

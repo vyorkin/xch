@@ -9,8 +9,8 @@ type t =
 
 let create ?(order_book = Order_book.empty) () =
   { order_book;
-    last_trade_price = Bignum.zero;
-    last_price_change = 0.0;
+    last_trade_price = Bignum.one;
+    last_price_change = 0.5;
     orders = Hashtbl.create (module Int) ~size:10;
   }
 
@@ -30,3 +30,11 @@ let trade xch =
       order_book
     }
   in (xch', trades)
+
+let place_orders xch orders =
+  let order_book =
+    List.fold
+      ~f:Order_book.place
+      ~init:xch.order_book
+      orders
+  in { xch with order_book }
