@@ -34,7 +34,7 @@ type direction = Ask | Bid
 type t = {
   id: int;
   direction: direction;
-  account: Account.t;
+  account: Account.t [@opaque];
   qty: int;
   price: Bignum.t [@printer Pretty.bignum];
   partials: Partial.t list;

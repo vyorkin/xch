@@ -8,9 +8,9 @@ let next_id () =
 
 type trade =
   { id: int;
-    trader: Account.t;
-    bid: Order.t;
-    ask: Order.t;
+    trader: Account.t [@opaque];
+    bid: Order.t [@opaque];
+    ask: Order.t [@opaque];
     price: Bignum.t [@printer Pretty.bignum];
     qty: int;
     created_at: Time.t [@printer Pretty.timestamp];

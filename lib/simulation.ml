@@ -8,25 +8,26 @@ type t =
   }
 
 let create ~num_agents =
-  let agents_table = Hashtbl.create (module Int) ~size:num_agents in
-  let agents = Agent.generate num_agents in
-  List.iter agents ~f:(fun agent ->
-      Hashtbl.add_exn agents_table
-        ~key:agent.account.id
-        ~data:agent
-    );
-  { agents = agents_table;
-    exchange = Exchange.create ();
+  let agents = Hashtbl.create (module Int) ~size:num_agents in
+  let agents_list = Agent.generate num_agents in
+  List.iter agents_list
+    ~f:(fun agent ->
+      Hashtbl.add_exn agents ~key:agent.account.id ~data:agent);
+  let last_trade_price = Bignum.one in
+  let last_price_change = 0.05 in
+  let exchange = Exchange.create ~last_price_change ~last_trade_price () in
+  { agents;
+    exchange;
     trades = [];
     ticks = ref 0;
   }
 
-let gen_orders ~agents ~(xch: Exchange.t) =
+let gen_orders { exchange; agents; _ } =
   Hashtbl.fold ~f:(fun ~key:account_id ~data:agent acc ->
-    let orders = Option.to_list (Hashtbl.find xch.orders account_id) in
+    let orders = Option.to_list (Hashtbl.find exchange.orders account_id) in
     let exceed = List.length orders >= agent.Agent.max_orders in
     if exceed then acc else begin
-      let price_change = xch.last_price_change in
+      let price_change = exchange.last_price_change in
       let order = Agent.create_order ~price_change agent in
       match order with
       | Some o -> o :: acc
@@ -36,10 +37,13 @@ let gen_orders ~agents ~(xch: Exchange.t) =
 
 let step sim =
   sim.ticks := !(sim.ticks) + 1;
-  let orders = gen_orders ~agents:sim.agents ~xch:sim.exchange in
+  let orders = gen_orders sim in
   let exchange = Exchange.place_orders sim.exchange orders in
   let (exchange, trades) = Exchange.trade exchange in
   { sim with trades; exchange }
 
 let run ~steps sim =
-  sim
+  let sim' = step sim in
+  if !(sim'.ticks) < steps
+  then step sim'
+  else sim'

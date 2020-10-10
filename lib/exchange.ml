@@ -7,11 +7,15 @@ type t =
     orders: (int, Order.t list) Hashtbl.t;
   }
 
-let create ?(order_book = Order_book.empty) () =
+let create
+      ?(order_book = Order_book.empty)
+      ?(last_trade_price = Bignum.zero)
+      ?(last_price_change = 0.0)
+      () =
   { order_book;
-    last_trade_price = Bignum.one;
-    last_price_change = 0.5;
-    orders = Hashtbl.create (module Int) ~size:10;
+    last_trade_price;
+    last_price_change;
+    orders = Hashtbl.create (module Int) ~size:20;
   }
 
 let trade xch =

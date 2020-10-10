@@ -37,20 +37,16 @@ let create_order ~price_change agent =
   let price = price_factor *. price_change in
   let ask () =
     let shares = Int.to_float !(agent.account.shares) in
-    let qty = qty_factor *. shares in
-    Order.ask
-      ~account:agent.account
-      ~qty:(truncate qty)
-      ~price:(Bignum.of_float_decimal price)
+    let qty = Float.abs @@ qty_factor *. shares in
+    let price = price |> Bignum.of_float_decimal |> Bignum.abs in
+    Order.ask ~account:agent.account ~qty:(truncate qty) ~price
   in
   let bid () =
     let balance = Bignum.to_float !(agent.account.balance) in
     let cost = qty_factor *. balance in
-    let qty = cost /. price in
-    Order.bid
-      ~account:agent.account
-      ~qty:(truncate qty)
-      ~price:(Bignum.of_float_decimal price)
+    let qty = Float.abs @@ cost /. price in
+    let price = price |> Bignum.of_float_decimal |> Bignum.abs in
+    Order.bid ~account:agent.account ~qty:(truncate qty) ~price
   in
   if price > 0.0 then Some (ask ())
   else if price < 0.0 then Some (bid ())

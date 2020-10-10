@@ -10,6 +10,9 @@ type t =
 (** Creates a simulation with a give [num_agents]. *)
 val create : num_agents:int -> t
 
+(** Generates orders. *)
+val gen_orders : t -> Order.t list
+
 (** Perfroms a single step of simulation. *)
 val step : t -> t
 

@@ -1,0 +1,9 @@
+open Core;;
+open Xch;;
+
+#install_printer Account.pp;;
+#install_printer Agent.pp;;
+#install_printer Agent.Decision.pp;;
+#install_printer Order.pp;;
+#install_printer Order.Partial.pp;;
+#install_printer Trade.pp;;

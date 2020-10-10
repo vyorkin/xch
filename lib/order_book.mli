@@ -28,6 +28,9 @@ val best_ask : t -> Order.t option
 (** Gets order with the highest bid price (if any). *)
 val best_bid : t -> Order.t option
 
+(** Matches orders and accumulates trades. *)
+val trade_acc : t -> Trade.t list -> t * Trade.t list
+
 (** Matches orders and returns a
     list of trades and updated order book. *)
 val trade : t -> t * Trade.t list

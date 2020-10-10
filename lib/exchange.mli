@@ -9,7 +9,12 @@ type t =
   }
 
 (** Creates a record containing exchange data. *)
-val create : ?order_book:Order_book.t -> unit -> t
+val create :
+  ?order_book:Order_book.t ->
+  ?last_trade_price: Bignum.t ->
+  ?last_price_change: float ->
+  unit ->
+  t
 
 (** Fills all matching orders, updates the
     state of exchange and returns a list of fulfilled trades. *)
