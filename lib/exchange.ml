@@ -35,10 +35,18 @@ let trade xch =
     }
   in (xch', trades)
 
-let place_orders xch orders =
+let place_orders xch orders_list =
+  let place (order: Order.t) =
+    Hashtbl.add_multi
+      xch.orders
+      ~key:order.account.id
+      ~data:order
+  in
   let order_book =
     List.fold
+      orders_list
       ~f:Order_book.place
       ~init:xch.order_book
-      orders
-  in { xch with order_book }
+  in
+  List.iter ~f:place orders_list;
+  { xch with order_book }

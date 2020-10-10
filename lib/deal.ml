@@ -12,6 +12,7 @@ let create ~bid ~ask =
   let bid' =
     { bid with
       qty = bid.qty - qty;
+      (* qty_filled : Hashtbl (int, int) = (ask.id, bid.qty - qty) *)
       partials = partial :: bid.partials;
     } in
   let ask' =

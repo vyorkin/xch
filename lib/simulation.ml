@@ -40,6 +40,7 @@ let step sim =
   let orders = gen_orders sim in
   let exchange = Exchange.place_orders sim.exchange orders in
   let (exchange, trades) = Exchange.trade exchange in
+  let exchange = List.fold trades ~f:Broker.execute ~init:exchange in
   { sim with trades; exchange }
 
 let run ~steps sim =
